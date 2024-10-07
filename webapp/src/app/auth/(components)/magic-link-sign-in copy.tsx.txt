@@ -1,0 +1,52 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Input } from '@/components/ui/input'
+import { postItem } from '@/lib/fetch'
+import { redirect, RedirectType, useRouter } from 'next/navigation'
+
+interface MagicLinkSignInProps {
+  // email?: string,
+  className?: string,
+  children?: any
+  variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined
+  redirectUrl?: string
+}
+export default function MagicLinkSignIn({
+  // provider,
+  className,
+  children,
+  variant,
+  redirectUrl = '#',
+  ...props
+}: MagicLinkSignInProps) {
+  const router = useRouter()
+
+  return (
+    <form
+      action={async (formData) => {
+        "use server"
+        try {
+          const result = await postItem('/auth/magicLink', '', {
+            email: formData.get('magicLinkEmail'),
+            web: 'aliabi.org',
+            callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/magicLink`
+          })
+          console.log('magicLink result:', result)
+          router.push(`${redirectUrl}?email=${formData.get('magicLinkEmail')}`)
+        } catch (err) {
+          console.error('magicLink err:', err)
+          return '#'
+        }
+      }}>
+      <div className={`grid grid-cols-12 gap-1 w-full ${className}`}>
+        <div className="relative col-span-10">
+          <Input className='ps-2' type='email' name="magicLinkEmail" placeholder='Magic Link' required />
+        </div>
+        <Button type="submit" className={`col-span-2`} variant={variant || 'default'} {...props}>
+          <i className="text-xl fa-regular fa-envelope"></i>
+        </Button>
+      </div>
+    </form>
+  )
+}

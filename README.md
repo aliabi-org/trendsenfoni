@@ -1,2 +1,5 @@
-# trendteknoloji
-Mobile Report System
+# Trend Senfoni
+
+Trend Senfoni Business Report App
+
+
