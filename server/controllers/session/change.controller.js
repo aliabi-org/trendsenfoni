@@ -12,6 +12,9 @@ module.exports = (dbModel, sessionDoc, req) =>
         case 'firm':
           changeDb(dbModel, sessionDoc, req).then(resolve).catch(reject)
           break
+        case 'dbList':
+          saveDbList(dbModel, sessionDoc, req).then(resolve).catch(reject)
+          break
         default:
           restError.param1(req, reject)
           break
@@ -20,6 +23,18 @@ module.exports = (dbModel, sessionDoc, req) =>
       restError.method(req, reject)
     }
   })
+
+function saveDbList(dbModel, sessionDoc, req) {
+  return new Promise(async (resolve, reject) => {
+    sessionDoc.dbList = req.body.dbList || []
+
+    sessionDoc
+      .save()
+      .then(resolve)
+      .catch(reject)
+
+  })
+}
 
 function changeDb(dbModel, sessionDoc, req) {
   return new Promise(async (resolve, reject) => {
@@ -33,17 +48,12 @@ function changeDb(dbModel, sessionDoc, req) {
 
     sessionDoc
       .save()
-      .then(async result => {
-        resolve({
-          dairyId: dairyDoc._id,
-          dairy: dairyDoc,
-          message: t(`session database has been changed successfully`, sessionDoc.language)
-        })
-      })
+      .then(resolve)
       .catch(reject)
 
   })
 }
+
 function changeLanguage(dbModel, sessionDoc, req) {
   return new Promise(async (resolve, reject) => {
     if (!req.params.param2) return restError.param2(req, reject)
@@ -51,10 +61,7 @@ function changeLanguage(dbModel, sessionDoc, req) {
     sessionDoc.language = req.params.param2
     sessionDoc
       .save()
-      .then(resolve({
-        lang: sessionDoc.language,
-        message: t('session language has been changed successfully', sessionDoc.language)
-      }))
+      .then(resolve)
       .catch(reject)
 
   })

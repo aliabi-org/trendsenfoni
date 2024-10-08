@@ -27,16 +27,17 @@ export default function EMailPasswordSignIn({
   const loginWithEmailPassword = () => {
     postItem('/auth/login', '', { email: email, password: password })
       .then(result => {
+        console.log('EMailPasswordSignIn result:', result)
         Cookies.set('token', result.token, { secure: true })
         Cookies.set('user', JSON.stringify(result.user), { secure: true })
-        Cookies.set('db', JSON.stringify(result.db || null), { secure: true })
-        Cookies.set('dbId', result.dbId || '', { secure: true })
         Cookies.set('dbList', JSON.stringify(result.dbList || []), { secure: true })
-        if ((result.dbList || []).length == 0) {
-          router.push('/databases')
-        } else {
-          router.push('/home')
-        }
+        Cookies.set('db', result.db || '', { secure: true })
+        Cookies.set('firm', result.firm || '', { secure: true })
+        Cookies.set('period', result.period || '', { secure: true })
+        Cookies.set('lang', result.lang || 'tr', { secure: true })
+
+        router.push('/home')
+
       })
       .catch(err => {
         toast({ title: 'Error', description: err, variant: 'destructive', duration: 1000 })

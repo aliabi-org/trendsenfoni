@@ -109,9 +109,12 @@ const authOptions = {
         const result = await postItem(url, '', { deviceId: getDeviceId(), user, account, profile })
         cookies().set('token', result.token, { secure: true })
         cookies().set('user', JSON.stringify(result.user), { secure: true })
-        cookies().set('db', JSON.stringify(result.db || null), { secure: true })
-        cookies().set('dbId', result.dbId || '', { secure: true })
-        cookies().set('dbList', JSON.stringify(result.dbList || []), { secure: true })
+        cookies().set('dbList', JSON.stringify(result.dbList), { secure: true })
+        cookies().set('db', result.db || '', { secure: true })
+        cookies().set('firm', result.firm || '', { secure: true })
+        cookies().set('period', result.period || '', { secure: true })
+        cookies().set('lang', result.lang || 'tr', { secure: true })
+
         return true
 
       } catch (err) {

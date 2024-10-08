@@ -24,10 +24,9 @@ function getList(dbModel, sessionDoc, req) {
       if (!ayarlar) return reject(`settings not found`)
       if (ayarlar.connector.connectionType == 'mssql') {
         if (ayarlar.connector.mssql.mainApp == 'mikro_v16') {
-          mikroHelper.getDbList(ayarlar.connector)
+          mikroHelper.bankBalances(dbModel, sessionDoc, ayarlar.connector)
             .then(async result => {
-              sessionDoc.dbList = result
-              sessionDoc.save()
+
               resolve(result)
             })
             .catch(reject)
@@ -37,7 +36,6 @@ function getList(dbModel, sessionDoc, req) {
       } else {
         reject('module is not ready yet.')
       }
-
 
     } catch (err) {
       reject(err)

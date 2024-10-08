@@ -24,14 +24,19 @@ export function DatabaseSelect() {
     setLoading(true)
     getList(`/dbList`, token)
       .then((result: DatabaseType[]) => {
-        console.log('result:', result)
         setDbList(result)
         Cookies.set('dbList', JSON.stringify(result))
-        const foundDb = result.find(k => k.db === db?.db)
-        if (!foundDb) {
-          setDb(result[0])
-          Cookies.set('db', JSON.stringify(result[0]))
+        if (result.length > 0) {
+          var database = result.find(k => k.db === db?.db)
+          if (!database) {
+            database = result[0]
+          }
+          setDb(database)
+          Cookies.set('db', database.db || '')
+          Cookies.set('firm', database.firm || '')
+          Cookies.set('period', database.period || '')
         }
+
       })
       .catch(err => toast({ title: 'Error', description: err }))
       .finally(() => setLoading(false))
@@ -42,21 +47,33 @@ export function DatabaseSelect() {
       setLoading(true)
       if (token) {
         if (Cookies.get('dbList')) {
-          let list = JSON.parse(Cookies.get('dbList') || '[]') as DatabaseType[]
+          var list = JSON.parse(Cookies.get('dbList') || '[]') as DatabaseType[]
           setDbList(list)
           if (Cookies.get('db')) {
-            const foundDb = list.find(k => k.db === db?.db)
+
+            var foundDb = list.find(k => k.db === (Cookies.get('db') || ''))
             setDb(foundDb)
           } else {
+
             setDb(list[0])
-            Cookies.set('db', JSON.stringify(list[0]))
+            Cookies.set('db', list[0].db || '')
+            Cookies.set('firm', list[0].firm || '')
+            Cookies.set('period', list[0].period || '')
           }
 
         } else {
-
-          setDbList([])
-          setDb(undefined)
-          Cookies.set('db', '')
+          if (Cookies.get('db')) {
+            setDb({
+              db: Cookies.get('db') || '',
+              firm: Cookies.get('firm') || '',
+              period: Cookies.get('period') || '',
+            })
+          }
+          // setDbList([])
+          // setDb(undefined)
+          // Cookies.set('db', '')
+          // Cookies.set('firm', '')
+          // Cookies.set('period', '')
           loadDbList()
         }
       }
@@ -64,31 +81,40 @@ export function DatabaseSelect() {
       console.log('hata:', err)
     }
     setLoading(false)
+
   }, [token])
   return (<div className='flex flex-col'>
-    <div className='flex flex-row gap-2 min-w-48'>
-      <Select
+    {!loading && <>
+      <div className='flex flex-row gap-2 min-w-48'>
+        <Select
 
-        defaultValue={db?.db}
-        onValueChange={e => {
-          const database = dbList.find(k => k.db === e)
-          setDb(database)
-          if (database) {
-            Cookies.set('db', JSON.stringify(database))
-          } else {
-            Cookies.set('db', '')
-          }
-        }}
-      >
-        <SelectTrigger className='text-xs' >
-          <SelectValue placeholder="-" />
-        </SelectTrigger>
-        <SelectContent className='text-xs' position="popper">
-          {dbList.map((e, index) => <SelectItem key={e.db} value={e.db || ''}>{e.dbName}</SelectItem>)}
-        </SelectContent>
-      </Select>
-      <Button variant={'outline'} onClick={loadDbList}><i className="fa-solid fa-rotate"></i></Button>
-    </div>
-    {db && <div>{db.db}</div>}
+          value={db?.db}
+          onValueChange={e => {
+            const database = dbList.find(k => k.db === e)
+            setDb(database)
+            if (database) {
+              Cookies.set('db', database.db || '')
+              Cookies.set('firm', database.firm || '')
+              Cookies.set('period', database.period || '')
+              postItem(`/session/change/db/${database.db}`, token, undefined)
+                .then(result => setTimeout(() => { window && window.location.reload() }, 100))
+                .catch(err => toast({ title: 'Error', description: err }))
+
+            } else {
+              Cookies.set('db', '')
+            }
+          }}
+        >
+          <SelectTrigger className='text-xs' >
+            <SelectValue placeholder="-" />
+          </SelectTrigger>
+          <SelectContent className='text-xs' position="popper">
+            {dbList.map((e, index) => <SelectItem key={e.db} value={e.db || ''}>{e.dbName}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Button variant={'outline'} onClick={loadDbList}><i className="fa-solid fa-rotate"></i></Button>
+      </div>
+      {/* {db && <div>{db.db}</div>} */}
+    </>}
   </div>)
 }

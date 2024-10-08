@@ -17,3 +17,26 @@ exports.getDbList = function (connector) {
     }
   })
 }
+
+exports.bankBalances = function (dbModel, sessionDoc, connector) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const query = `SELECT 
+       [msg_S_0070] as Banka
+      ,[msg_S_1530] as Bakiye
+	    ,[msg_S_0849] as ParaBirimi
+      FROM ${sessionDoc.db}..[BANKALAR_CHOOSE_3A]`
+      mssql(connector.clientId, connector.clientPass, connector.mssql, query)
+        .then(result => {
+          if (result.recordsets) {
+            resolve(result.recordsets[0])
+          } else {
+            resolve([])
+          }
+        })
+        .catch(reject)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}

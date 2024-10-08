@@ -2,7 +2,7 @@ const auth = require('../../lib/auth')
 const { ObjectId } = require('mongodb')
 exports.saveSession = async function (memberDoc, role, req, loginProvider = 'aliabi', oauth2 = null) {
 	let deviceId = req.getValue('deviceId') || ''
-	let lang = req.getValue('language') || req.getValue('lang') || ''
+	let lang = req.getValue('lang') || ''
 	let oldSessions = []
 	try {
 		oldSessions = await db.sessions
@@ -22,7 +22,17 @@ exports.saveSession = async function (memberDoc, role, req, loginProvider = 'ali
 
 	return new Promise(async (resolve, reject) => {
 		try {
-
+			let oldDb = ''
+			let oldFirm = ''
+			let oldPeriod = ''
+			let oldDbList = []
+			if (oldSessions.length > 0) {
+				if (!lang) lang = oldSessions[0].lang
+				oldDb = oldSessions[0].db
+				oldFirm = oldSessions[0].firm
+				oldPeriod = oldSessions[0].period
+				oldDbList = oldSessions[0].dbList
+			}
 			let sessionDoc = new db.sessions({
 				member: memberDoc._id,
 				loginProvider: loginProvider,
@@ -30,12 +40,15 @@ exports.saveSession = async function (memberDoc, role, req, loginProvider = 'ali
 				email: memberDoc.email,
 				phoneNumber: memberDoc.phoneNumber,
 				role: role,
+				db: oldDb || '',
+				firm: oldFirm || '',
+				period: oldPeriod || '',
+				dbList: oldDbList || [],
 				deviceId: deviceId,
-				dairy: null,
 				IP: req.IP || '',
 				lastIP: req.IP || '',
 				closed: false,
-				language: lang || 'tr',
+				lang: lang || 'tr',
 				oauth2: oauth2,
 				requestHeaders: req.headers
 			})
@@ -46,6 +59,11 @@ exports.saveSession = async function (memberDoc, role, req, loginProvider = 'ali
 				.then(async (newDoc) => {
 					let obj = {
 						token: 'AABI_' + auth.sign({ sessionId: newDoc._id.toString() }),
+						db: newDoc.db,
+						firm: newDoc.firm,
+						period: newDoc.period,
+						dbList: newDoc.dbList,
+						lang: newDoc.lang,
 						user: memberDoc.toJSON(),
 					}
 					delete obj.user.password

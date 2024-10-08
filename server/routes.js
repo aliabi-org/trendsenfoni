@@ -35,7 +35,9 @@ module.exports = (app) => {
   adminControllers(app, '/api/v1/admin/:func/:param1/:param2/:param3')
   s3Controllers(app, '/api/v1/s3/:func/:param1/:param2/:param3')
   repoControllers(app, '/api/v1/repo/:func/:param1/:param2/:param3')
+  reportsControllers(app, '/api/v1/reports/:func/:param1/:param2/:param3')
   masterControllers(app, '/api/v1/:func/:param1/:param2/:param3')
+
 
   app.use((req, res, next) => {
     res.status(404).json({ success: false, error: `function not found. ${req.originalUrl}` })
@@ -118,6 +120,30 @@ function masterControllers(app, route) {
     } else next()
   })
 }
+
+function reportsControllers(app, route) {
+  setRoutes(app, route, (req, res, next) => {
+    const ctl = getController('/reports', req.params.func)
+    if (ctl) {
+      passport(req)
+        .then((sessionDoc) => {
+          ctl(db, sessionDoc, req)
+            .then((data) => {
+              if (data == undefined) res.json({ success: true })
+              else if (data == null) res.json({ success: true })
+              else {
+                res.status(200).json({ success: true, data: data })
+              }
+            })
+            .catch(next)
+        })
+        .catch((err) => {
+          res.status(401).json({ success: false, error: err })
+        })
+    } else next()
+  })
+}
+
 function repoControllers(app, route) {
   setRoutes(app, route, (req, res, next) => {
     const ctl = getController('/repo', req.params.func)
