@@ -27,15 +27,29 @@ import { useToast } from '@/components/ui/use-toast'
 import { getItem, postItem, putItem } from '@/lib/fetch'
 import { SettingType } from '@/types/SettingType'
 
-export function ConnectorSettings() {
+export function SqlConnection() {
   const [token, setToken] = useState('')
   const [clientId, setClientId] = useState('')
   const [clientPass, setClientPass] = useState('')
   const [testResult, setTestResult] = useState('')
 
-  // const router = useRouter()
-  // const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const { toast } = useToast()
+
+  const save = () => {
+    putItem(`/settings`, token, {
+      connector: {
+        clientId: clientId,
+        clientPass: clientPass,
+      }
+    })
+      .then((result: SettingType) => {
+        console.log('result:', result)
+        toast({ title: 'Kayıt Başarılı' })
+      })
+      .catch(err => toast({ title: 'error', description: err || '' }))
+  }
 
   const load = () => {
     getItem('/settings', token)
@@ -48,11 +62,11 @@ export function ConnectorSettings() {
   useEffect(() => { !token && setToken(Cookies.get('token') || '') }, [])
   useEffect(() => { token && load() }, [token])
   return (
-    <Card className="11w-[350px]">
-      < CardHeader >
-        <CardTitle>Connector</CardTitle>
+    <Card className="w11-[340px]">
+      <CardHeader>
+        <CardTitle>Sql Connection</CardTitle>
         <CardDescription>Anamakinaya kurulmus olan Connector baglanti bilgileri</CardDescription>
-      </CardHeader >
+      </CardHeader>
       <CardContent>
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
@@ -68,6 +82,20 @@ export function ConnectorSettings() {
               defaultValue={clientPass}
               onBlur={e => setClientPass(e.target.value)}
             />
+          </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="framework">Framework</Label>
+            <Select>
+              <SelectTrigger id="framework">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="next">Next.js</SelectItem>
+                <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                <SelectItem value="astro">Astro</SelectItem>
+                <SelectItem value="nuxt">Nuxt.js</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -86,16 +114,7 @@ export function ConnectorSettings() {
 
             <i className="fa-solid fa-plug me-2"></i> Test
           </Button>
-          <Button onClick={() => {
-            putItem(`/settings`, token, {
-              connector: { clientId: clientId, clientPass: clientPass, }
-            })
-              .then((result: SettingType) => {
-                toast({ title: 'Kayıt Başarılı' })
-                setTimeout(() => { window && window.location.reload() }, 1000)
-              })
-              .catch(err => toast({ title: 'error', description: err || '' }))
-          }}><i className="fa-solid fa-check"></i></Button>
+          <Button onClick={save}><i className="fa-solid fa-check"></i></Button>
         </div>
         <div className='w-full mt-2'>
           <pre>
@@ -104,6 +123,6 @@ export function ConnectorSettings() {
           </pre>
         </div>
       </CardFooter>
-    </Card >
+    </Card>
   )
 }
