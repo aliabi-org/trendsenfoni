@@ -98,18 +98,26 @@ export function ConnectorSettings(props: Props) {
         </CardContent>
         <CardFooter className="flex flex-col">
           <div className='flex justify-between w-full'>
-            <Button
-              variant="secondary"
-              title='Connector test'
-              onClick={() => {
-                postItem(`/settings/connectorTest`, token, { clientId: connector.clientId, clientPass: connector.clientPass })
-                  .then(result => setTestResult(`OK\nServer Tarihi:\n${result}`))
-                  .catch(err => setTestResult(`Hata:\n${err}`))
-              }}
-            >
-
-              <i className="fa-solid fa-plug me-2"></i> Test
-            </Button>
+            <div>
+              {!testResult && <>
+                <Button
+                  variant="secondary"
+                  title='Connector test'
+                  onClick={() => {
+                    postItem(`/settings/connectorTest`, token, { clientId: connector.clientId, clientPass: connector.clientPass })
+                      .then(result => setTestResult(`OK\nServer Tarihi:\n${result}`))
+                      .catch(err => setTestResult(`Hata:\n${err}`))
+                  }}
+                >
+                  <i className="fa-solid fa-plug me-2"></i> Test
+                </Button>
+              </>}
+              {testResult && <>
+                <Button variant="secondary" onClick={() => setTestResult('')}>
+                  <i className="fa-solid fa-broom me-2"></i> Temizle
+                </Button>
+              </>}
+            </div>
             <Button onClick={() => {
               putItem(`/settings`, token, {
                 connector: {
@@ -126,9 +134,8 @@ export function ConnectorSettings(props: Props) {
             }}><i className="fa-solid fa-check"></i></Button>
           </div>
           <div className='w-full mt-2'>
-            <pre>
+            <pre className='w-full overflow-y-auto max-h-80 text-sm'>
               {testResult}
-
             </pre>
           </div>
         </CardFooter>

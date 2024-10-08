@@ -2,6 +2,7 @@
 import { DairyType } from '@/types/DairyType'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
+import { DatabaseSelect } from './database-selection'
 export const DashboardFooter = (props: any) => {
   const [dairy, setDairy] = useState<DairyType>()
   const token = Cookies.get('token') || ''
@@ -26,15 +27,7 @@ export const DashboardFooter = (props: any) => {
         ©{new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_COMPANY_NAME || 'ENV ERROR'}
       </p>
       <div className='flex items-center gap-2'>
-        {dairy && <>
-          <div className='flex flex-col gap-0'>
-            <div className='text-xs text-gray-500'>{dairy.startDate}</div>
-            <div className='text-xs text-gray-500'>{dairy.endDate}</div>
-          </div>
-
-
-          <span>{dairy.hourlyWage} {dairy.currency}</span>
-        </>}
+        <DatabaseSelect />
       </div>
     </footer>
   )

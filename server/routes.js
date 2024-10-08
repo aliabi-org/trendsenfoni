@@ -234,12 +234,11 @@ function sendError(err, req, res) {
   }
   else if (process.env.ERROR_DOCUMENTATION_URI && req.route) {
     let baseUrl = req.route.path.split('/:func')[0]
-    let ctl = baseUrl.substring('/api/v1'.length + 1)
     let func = req.url
       .substring(baseUrl.length + 1)
       .split('?')[0]
       .split('/')[0]
-    response.docUrl = `${process.env.ERROR_DOCUMENTATION_URI}?ctl=${ctl}&func=${func}`
+    response.docUrl = `${process.env.ERROR_DOCUMENTATION_URI}?func=${func}`
   }
   res.status(statusCode).json(response)
 }

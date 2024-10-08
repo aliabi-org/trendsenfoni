@@ -56,12 +56,6 @@ export function SqlConnection() {
           {/* <CardDescription>Anamakinaya kurulmus olan Connector baglanti bilgileri</CardDescription> */}
         </CardHeader>
         <CardContent className='p-3 flex flex-col gap-4'>
-          {/* <div className='text-sm bg-slate-200 dark:bg-slate-800 p-2 rounded-md'>
-          <div className='w-full bg-green-500 p-1 rounded-sm'>Connector</div>
-          <div><span className='text-gray-500'>cliendId:</span> {clientId}</div>
-          <div><span className='text-gray-500'>cliendPass:</span> {clientPass}</div>
-        </div> */}
-
           <div className="grid w-full items-center gap-4">
             <div className='grid grid-cols-2 gap-4'>
               <div className="flex flex-col space-y-1.5">
@@ -80,35 +74,39 @@ export function SqlConnection() {
               </div>
 
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label >Port</Label>
-              <Input
-                type='number'
-                defaultValue={connector.mssql?.port || 1433}
-                onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, port: isNaN(Number(e.target.value)) ? 1433 : Number(e.target.value) } })}
-              />
+            <div className='grid grid-cols-2 gap-4'>
+              <div className="flex flex-col space-y-1.5">
+                <Label>Database</Label>
+                <Input
+                  defaultValue={connector.mssql?.database || 'Mikro_V16'}
+                  onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, database: e.target.value } })}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label >Port</Label>
+                <Input
+                  type='number'
+                  defaultValue={connector.mssql?.port || 1433}
+                  onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, port: isNaN(Number(e.target.value)) ? 1433 : Number(e.target.value) } })}
+                />
+              </div>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label>Database</Label>
-              <Input
-                defaultValue={connector.mssql?.database || 'Mikro_V16'}
-                onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, database: e.target.value } })}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label>Db User</Label>
-              <Input
-                defaultValue={connector.mssql?.user || 'sa'}
-                onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, user: e.target.value } })}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label>Db Password</Label>
-              <Input
-                type='password'
-                defaultValue={connector.mssql?.password || ''}
-                onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, password: e.target.value } })}
-              />
+            <div className='grid grid-cols-2 gap-4'>
+              <div className="flex flex-col space-y-1.5">
+                <Label>Db User</Label>
+                <Input
+                  defaultValue={connector.mssql?.user || 'sa'}
+                  onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, user: e.target.value } })}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label>Db Password</Label>
+                <Input
+                  type='password'
+                  defaultValue={connector.mssql?.password || ''}
+                  onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, password: e.target.value } })}
+                />
+              </div>
             </div>
             <div className="">
               <Label className='flex items-center gap-2'>
@@ -157,21 +155,30 @@ export function SqlConnection() {
         </CardContent>
         <CardFooter className="flex flex-col">
           <div className='flex justify-between w-full'>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                postItem(`/settings/mssqlTest`, token, {
-                  clientId: connector.clientId,
-                  clientPass: connector.clientPass,
-                  mssql: connector.mssql,
-                })
-                  .then(result => setTestResult(`OK\nTablo Isimleri:\n${JSON.stringify(result.recordset, null, 2)}`))
-                  .catch(err => setTestResult(`Hata:\n${err}`))
-              }}
-            >
+            <div>
+              {!testResult && <>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    postItem(`/settings/mssqlTest`, token, {
+                      clientId: connector.clientId,
+                      clientPass: connector.clientPass,
+                      mssql: connector.mssql,
+                    })
+                      .then(result => setTestResult(`OK\nTablo Isimleri:\n${JSON.stringify(result.recordsets, null, 2)}`))
+                      .catch(err => setTestResult(`Hata:\n${err}`))
+                  }}
+                >
 
-              <i className="fa-solid fa-database me-2"></i> SQL Test
-            </Button>
+                  <i className="fa-solid fa-database me-2"></i> SQL Test
+                </Button>
+              </>}
+              {testResult && <>
+                <Button variant="secondary" onClick={() => setTestResult('')}>
+                  <i className="fa-solid fa-broom me-2"></i> Temizle
+                </Button>
+              </>}
+            </div>
             <Button onClick={() => {
               putItem(`/settings`, token, { connector: { mssql: connector.mssql } })
                 .then((result: SettingType) => {
@@ -182,9 +189,8 @@ export function SqlConnection() {
             }}><i className="fa-solid fa-check"></i></Button>
           </div>
           <div className='w-full mt-2'>
-            <pre className='w-full overflow-y-scroll max-h-80 text-sm'>
+            <pre className='w-full overflow-y-auto max-h-80 text-sm'>
               {testResult}
-
             </pre>
           </div>
         </CardFooter>
