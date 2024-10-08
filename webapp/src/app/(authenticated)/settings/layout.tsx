@@ -5,7 +5,7 @@ export const metadata: Metadata = pageMeta('Ayarlar')
 
 export default function PageLayout({ children }: { children: any }) {
   return (<>
-    <div className='container mx-auto py-8 px-4 md:px-6'>
+    <div className='container mx-auto py-1 px-1 md:px-4 md:py-4'>
       {children}
     </div>
   </>)

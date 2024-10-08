@@ -18,6 +18,8 @@ export function errorLog(obj: any, ...placeholders: any[]): void {
 
 function welcomeMsg() {
   if (typeof window != 'undefined') {
+
+    if (localStorage.getItem('_welcomeMsg') == new Date().toISOString().substring(0, 10)) return
     let msg = `%c 🍀AliAbi.org - We are shaping the future with the power of "Open Source"!🍀 \n 🍀💚🙏🏽🪬  You can see our source codes from https://github.com/aliabi-org  `
     let styles = [
       'font-size: 16px',
@@ -30,6 +32,7 @@ function welcomeMsg() {
       'border-radius: 4px;',
     ].join(';')
     console.log(msg, styles)
+    localStorage.setItem('_welcomeMsg', new Date().toISOString().substring(0, 10))
   }
 }
 

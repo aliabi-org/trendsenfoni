@@ -14,6 +14,8 @@ module.exports = (dbModel, sessionDoc, req) =>
       case 'PUT':
         if (req.params.param1 == 'connectorTest') {
           connectorTest(dbModel, sessionDoc, req).then(resolve).catch(reject)
+        } else if (req.params.param1 == 'mssqlTest') {
+          mssqlTest(dbModel, sessionDoc, req).then(resolve).catch(reject)
         } else {
           save(dbModel, sessionDoc, req).then(resolve).catch(reject)
         }
@@ -51,7 +53,8 @@ function save(dbModel, sessionDoc, req) {
       if (!settingDoc) {
         settingDoc = new dbModel.settings(data)
       } else {
-        settingDoc = Object.assign(settingDoc, data)
+
+        Object.assign(settingDoc.connector, data.connector || {})
       }
 
       if (!epValidateSync(settingDoc, reject)) return
@@ -73,6 +76,31 @@ function connectorTest(dbModel, sessionDoc, req) {
       if (!clientPass) return reject(`clientPass required`)
       connectorAbi
         .dateTime(clientId, clientPass)
+        .then(resolve)
+        .catch(reject)
+
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+function mssqlTest(dbModel, sessionDoc, req) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const clientId = req.getValue('clientId')
+      const clientPass = req.getValue('clientPass')
+
+      const mssql = req.body.mssql
+      if (!clientId) return reject(`clientId required`)
+      if (!clientPass) return reject(`clientPass required`)
+      if (!mssql) return reject(`mssql required`)
+
+      const query = `SELECT name, object_id, create_date FROM sys.objects WHERE type='U' ORDER BY name`
+
+      console.log('mssql:', mssql)
+      connectorAbi
+        .mssql(clientId, clientPass, mssql, query)
         .then(resolve)
         .catch(reject)
 

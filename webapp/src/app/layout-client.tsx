@@ -7,20 +7,7 @@ import { eventLog, consoleLogWelcomeMsg } from '@/lib/log'
 import Cookies from 'js-cookie'
 const ComponentForSessionProvider = () => {
   // const { data: session, update, status } = useSession()
-  const [welcomeMsg, setWelcomeMsg] = useState(false)
-  const yol = usePathname()
-  if (!welcomeMsg) {
-    setWelcomeMsg(true)
-    consoleLogWelcomeMsg()
-  }
-
-
-  // useEffect(()=>{
-  //   if(!welcomeMsg){
-  //     setWelcomeMsg(true)
-  //     consoleLogWelcomeMsg()
-  //   }
-  // },[])
+  consoleLogWelcomeMsg()
   return <></>
 }
 
