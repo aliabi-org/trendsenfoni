@@ -14,6 +14,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { TabsContent } from '@/components/ui/tabs'
 import { SideMenu } from './(components)/side-menu'
 import React from 'react'
+import '@/styles/piechart-style.css'
 
 
 

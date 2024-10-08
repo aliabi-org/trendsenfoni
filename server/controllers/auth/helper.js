@@ -40,30 +40,6 @@ exports.saveSession = async function (memberDoc, role, req, loginProvider = 'ali
 				requestHeaders: req.headers
 			})
 
-			let oldDairyId = null
-			if (oldSessions.length > 0) {
-				sessionDoc.language = oldSessions[0].language
-				oldDairyId = oldSessions[0].dairy || null
-			}
-
-
-			const dairyDocs = await db.dairy.find({
-				member: memberDoc._id, passive: false
-			})
-
-			let dairyDoc = null
-			if (oldDairyId == null && dairyDocs.length > 0) {
-				dairyDoc = dairyDocs[0]
-			} else if (oldDairyId && dairyDocs.length > 0) {
-				dairyDoc = dairyDocs.find(e => e._id == oldDairyId)
-				if (!dairyDoc) {
-					dairyDoc = dairyDocs[0]
-				}
-			}
-			if (dairyDoc) {
-				sessionDoc.dairy = dairyDoc._id
-			}
-
 
 			sessionDoc
 				.save()
@@ -71,8 +47,6 @@ exports.saveSession = async function (memberDoc, role, req, loginProvider = 'ali
 					let obj = {
 						token: 'AABI_' + auth.sign({ sessionId: newDoc._id.toString() }),
 						user: memberDoc.toJSON(),
-						dairyId: dairyDoc && dairyDoc._id || '',
-						dairy: dairyDoc,
 					}
 					delete obj.user.password
 					resolve(obj)

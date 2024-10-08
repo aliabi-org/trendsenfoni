@@ -27,7 +27,7 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ }) => {
           </CustomLink>
 
           <CustomLink className="rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800" href="/settings">
-            Settings
+            Ayarlar
           </CustomLink>
         </nav>
       </div>

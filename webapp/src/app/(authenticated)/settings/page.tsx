@@ -1,25 +1,19 @@
-import { FC } from 'react'
-import { Metadata } from 'next/types'
-import pageMeta from '@/lib/meta-info'
+"use client"
 
-// import { cookies } from 'next/headers'
-import ClientOrnek from './ClientOrnek'
-export const metadata: Metadata = pageMeta('Settings')
+import { ConnectorSettings } from './connector-settings'
 
-
-const SettingsPage = () => {
+export default function SettingsPage() {
   // const cookieStore = cookies()
 
   return (
-    <div className='container mx-auto py-8 px-4 md:px-6'>
-      <h1>Settings</h1>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas ipsum, repudiandae perferendis dolorem voluptate sequi error corrupti odit! Id mollitia repellendus quidem magnam voluptatum eveniet quis molestias qui atque omnis?</p>
+    <div className='container mx-auto py-2 px-4 md:px-6 flex flex-col gap-4'>
+      <h1>Ayarlar</h1>
       <hr />
-
-      {/* <ClientOrnek token={'prop token'} /> */}
+      <div className='mt-4'>
+        <ConnectorSettings />
+      </div>
 
     </div>
   )
 }
 
-export default SettingsPage

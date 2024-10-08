@@ -16,7 +16,10 @@ module.exports = (req) =>
 
 		switch (req.params.param1) {
 			case 'google':
-				googleProvider(req).then(resolve).catch(reject)
+				googleProvider(req).then(resolve).catch(err => {
+					console.log(err)
+					reject(err)
+				})
 				break
 			case 'yandex':
 				yandexProvider(req).then(resolve).catch(reject)

@@ -3,17 +3,10 @@ module.exports = function (dbModel) {
 	const schema = mongoose.Schema(
 		{
 			member: { type: ObjectId, ref: 'members', index: true },
-			startDate: { type: String, required: true, min: 10, max: 10, index: true },
-			endDate: { type: String, required: true, min: 10, max: 10, index: true },
-			targetIncome: { type: Number, required: true, index: true },
-			hourlyWage: { type: Number, required: true, index: true },
-			currency: { type: String, required: true, index: true },
-			personalGoals: [{
-				name: { type: String, required: true },
-				done: { type: Boolean, default: false, index: true },
-				percent: { type: Number, default: 0, min: 0, max: 10, index: true }
-			}],
-			passive: { type: Boolean, default: false, index: true }
+			connector: {
+				clientId: { type: String, default: '', index: true },
+				clientPass: { type: String, default: '', index: true },
+			},
 		},
 		{ versionKey: false, timestamps: true }
 	)
