@@ -38,7 +38,7 @@ export function getList(path: string, token?: string) {
   })
 }
 
-export function putItem(path: string, token?: string, item: any) {
+export function putItem(path: string, token?: string, item?: any) {
   return new Promise<any>((resolve, reject) => {
     fetch(`${process.env.NEXT_PUBLIC_API_URI}${path}`, {
       method: 'PUT',
@@ -55,7 +55,7 @@ export function putItem(path: string, token?: string, item: any) {
       }).catch(reject)
   })
 }
-export function postItem(path: string, token?: string, item: any) {
+export function postItem(path: string, token?: string, item?: any) {
   return new Promise<any>((resolve, reject) => {
     fetch(`${process.env.NEXT_PUBLIC_API_URI}${path}`, {
       method: 'POST',
@@ -96,7 +96,7 @@ export interface SearchParamProps {
   populate?: any
   limit?: number
 }
-export function searchList(path: string, token?: string, searchParam: SearchParamProps | any) {
+export function searchList(path: string, token?: string, searchParam?: SearchParamProps | any) {
   return new Promise<any>((resolve, reject) => {
 
     fetch(`${process.env.NEXT_PUBLIC_API_URI}${path}`, {

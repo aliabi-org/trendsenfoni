@@ -28,7 +28,9 @@ module.exports = (app) => {
   app.all('/api/v1', function (req, res) {
     res.status(200).json({ success: true, data: apiWelcomeMessage })
   })
-
+  app.all('/', function (req, res) {
+    res.status(200).json({ success: true, data: apiWelcomeMessage })
+  })
 
   authControllers(app, '/api/v1/auth/:func/:param1/:param2/:param3')
   sessionControllers(app, '/api/v1/session/:func/:param1/:param2/:param3')
