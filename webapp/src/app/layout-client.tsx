@@ -7,7 +7,7 @@ import { eventLog, consoleLogWelcomeMsg } from '@/lib/log'
 import Cookies from 'js-cookie'
 const ComponentForSessionProvider = () => {
   // const { data: session, update, status } = useSession()
-  consoleLogWelcomeMsg()
+  // consoleLogWelcomeMsg()
   return <></>
 }
 
@@ -18,7 +18,7 @@ const LayoutClientSide = () => {
     router.push('/home')
   }
   return <>
-    <ComponentForSessionProvider />
+    {/* <ComponentForSessionProvider /> */}
   </>
 }
 

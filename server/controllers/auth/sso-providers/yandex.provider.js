@@ -10,7 +10,6 @@ module.exports = (req) =>
 			if (!req.body.account)
 				return reject(`'account' parameter is required`)
 
-			console.log('req.body:', req.body)
 			const deviceId = req.getValue('deviceId') || ''
 			const email = req.body.user.email || ''
 			// const id_token = req.body.account.id_token

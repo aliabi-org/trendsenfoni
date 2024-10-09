@@ -10,9 +10,9 @@
   },
   "author": "Ali TEK <alitek@gmail.com>",
   "scripts": {
-    "dev": "next dev -p 3322",
+    "dev": "next dev -p 2702",
     "build": "next build",
-    "start": "next start -p 3322",
+    "start": "next start -p 2702",
     "lint": "next lint"
   },
   "dependencies": {

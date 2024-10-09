@@ -61,24 +61,26 @@ export function SqlConnection() {
               <div className="flex flex-col space-y-1.5">
                 <Label >MS SQL Server</Label>
                 <Input
-                  defaultValue={connector.mssql?.server || 'localhost'}
+                  defaultValue={connector.mssql?.server}
                   onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, server: e.target.value } })}
+                  placeholder='localhost'
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label>Instance</Label>
                 <Input
-                  defaultValue={connector.mssql?.dialectOptions?.instanceName || 'SQLExpress'}
+                  defaultValue={connector.mssql?.dialectOptions?.instanceName}
                   onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, dialectOptions: { instanceName: e.target.value } } })}
+
                 />
               </div>
 
             </div>
             <div className='grid grid-cols-2 gap-4'>
               <div className="flex flex-col space-y-1.5">
-                <Label>Database</Label>
+                <Label>Database (MasterDB)</Label>
                 <Input
-                  defaultValue={connector.mssql?.database || 'Mikro_V16'}
+                  defaultValue={connector.mssql?.database}
                   onBlur={e => setConnector({ ...connector, mssql: { ...connector.mssql, database: e.target.value } })}
                 />
               </div>
