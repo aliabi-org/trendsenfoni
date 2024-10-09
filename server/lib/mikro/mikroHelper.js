@@ -40,3 +40,25 @@ exports.bankBalances = function (dbModel, sessionDoc, connector) {
     }
   })
 }
+
+exports.inventoryCards = function (dbModel, sessionDoc, connector) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const query = `SELECT 
+       [sto_kod] as Kod
+      ,[sto_isim] as Isim
+      FROM ${sessionDoc.db}..[STOKLAR]`
+      mssql(connector.clientId, connector.clientPass, connector.mssql, query)
+        .then(result => {
+          if (result.recordsets) {
+            resolve(result.recordsets[0])
+          } else {
+            resolve([])
+          }
+        })
+        .catch(reject)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}

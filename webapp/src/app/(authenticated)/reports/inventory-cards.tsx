@@ -14,7 +14,7 @@ import Cookies from 'js-cookie'
 import { getItem, getList } from '@/lib/fetch'
 import { moneyFormat } from '@/lib/utils'
 
-export function BankBalances() {
+export function InventoryCards() {
   const [token, setToken] = useState('')
   const [list, setList] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -23,7 +23,7 @@ export function BankBalances() {
   useEffect(() => { !token && setToken(Cookies.get('token') || '') }, [])
   useEffect(() => {
     if (token) {
-      getList('/reports/bankBalances', token)
+      getList('/reports/inventoryCards', token)
         .then(result => {
           console.log('result:', result)
           setList(result)
@@ -36,15 +36,15 @@ export function BankBalances() {
       {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead className="">Banka</TableHead>
-          <TableHead className="text-right">Bakiye</TableHead>
+          <TableHead className="">Kod</TableHead>
+          <TableHead className="">Isim</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className='overflow-hidden'>
         {list && list.map((e) => (
-          <TableRow key={e.Banka}>
-            <TableCell className="font-medium text-wrap">{e.Banka}</TableCell>
-            <TableCell className="text-right">{moneyFormat(e.Bakiye)} {e.ParaBirimi}</TableCell>
+          <TableRow key={e.Kod}>
+            <TableCell className="font-medium text-wrap">{e.Kod}</TableCell>
+            <TableCell className="">{e.Isim}</TableCell>
           </TableRow>
         ))}
       </TableBody>

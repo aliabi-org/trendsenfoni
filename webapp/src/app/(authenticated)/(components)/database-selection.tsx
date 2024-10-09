@@ -31,10 +31,18 @@ export function DatabaseSelect() {
           if (!database) {
             database = result[0]
           }
-          setDb(database)
-          Cookies.set('db', database.db || '')
-          Cookies.set('firm', database.firm || '')
-          Cookies.set('period', database.period || '')
+
+          if (database) {
+            postItem(`/session/change/db/${database.db}`, token, undefined)
+              .then(result => {
+                setDb(database)
+                Cookies.set('db', database?.db || '')
+                Cookies.set('firm', database?.firm || '')
+                Cookies.set('period', database?.period || '')
+                setTimeout(() => { window && window.location.reload() }, 100)
+              })
+              .catch(err => toast({ title: 'Error', description: err }))
+          }
         }
 
       })
@@ -56,9 +64,14 @@ export function DatabaseSelect() {
           } else {
 
             setDb(list[0])
-            Cookies.set('db', list[0].db || '')
-            Cookies.set('firm', list[0].firm || '')
-            Cookies.set('period', list[0].period || '')
+
+            postItem(`/session/change/db/${list[0].db}`, token, undefined)
+              .then(result => {
+                Cookies.set('db', list[0].db || '')
+                Cookies.set('firm', list[0].firm || '')
+                Cookies.set('period', list[0].period || '')
+              })
+              .catch(err => toast({ title: 'Error', description: err }))
           }
 
         } else {

@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation'
 import { Switch } from '@/components/ui/switch'
 import ButtonLink from '@/components/button-link'
 import { BankBalances } from './bank-balances'
+import { InventoryCards } from './inventory-cards'
 
 const DairyListPage = () => {
   const [token, setToken] = useState('')
@@ -38,7 +39,12 @@ const DairyListPage = () => {
     <div className='flex flex-col gap-4'>
       <h1>Raporlar</h1>
       <hr />
-      <BankBalances />
+      <div className='flex flex-row gap-4'>
+        <Button onClick={() => setReport('inventoryCards')}>Stok Listesi</Button>
+        <Button onClick={() => setReport('bankBalances')}>Banka Durumlari</Button>
+      </div>
+      {report == 'bankBalances' && <BankBalances />}
+      {report == 'inventoryCards' && <InventoryCards />}
     </div>
   )
 }

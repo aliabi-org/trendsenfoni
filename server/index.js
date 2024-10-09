@@ -45,12 +45,15 @@ function showAppInfo() {
 	console.log('App Name:'.padding(25), package.name.toUpperCase().brightYellow)
 	console.log('Version:'.padding(25), package.version.brightGreen)
 	console.log('Http Port:'.padding(25), (process.env.HTTP_PORT || '').cyan)
+	console.log('MongoDB URI:'.padding(25), (process.env.MONGODB_URI || '').cyan)
+	console.log('Connector API:'.padding(25), (process.env.CONNECTOR_API || '').cyan)
 	console.log('Uptime Started:'.padding(25), new Date().yyyymmddhhmmss().white)
-	console.log('Copyright:'.padding(25), `2023-Now (c) ${package.author || ''}`.green)
+	console.log('Copyright:'.padding(25), `2014-${new Date().getFullYear()} (c) ${package.author || ''}`.green)
 	console.log('NODE_ENV:'.padding(25), (process.env.NODE_ENV || 'production').toUpperCase().cyan)
 
 	console.log('-'.repeat(70))
 }
+
 
 async function test() {
 	// var i = 0
