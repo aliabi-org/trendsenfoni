@@ -3,59 +3,58 @@ import { UserType } from '@/types/UserType'
 import { cookies } from 'next/headers'
 import { v4 } from 'uuid'
 import Cookies from 'js-cookie'
-import kurabi from '@/lib/kurabi'
 export function getAuthToken() {
   const token = cookies().get('token')?.value || ''
   return token
 }
 
-export function getAuthUser() {
-  let user: UserType = {}
-  // if (typeof window == 'undefined') {
-  //   try {
-  //     user = JSON.parse(cookies().get('user')?.value || '{}') as UserType
-  //   } catch { }
-  // } else {
-  //   try {
-  //     user = JSON.parse(Cookies.get('user') || '{}') as UserType
-  //   } catch { }
-  // }
-  try {
-    user = JSON.parse(kurabi.get('user') || '{}') as UserType
-  } catch { }
-  return user
-}
+// export function getAuthUser() {
+//   let user: UserType = {}
+//   // if (typeof window == 'undefined') {
+//   //   try {
+//   //     user = JSON.parse(cookies().get('user')?.value || '{}') as UserType
+//   //   } catch { }
+//   // } else {
+//   //   try {
+//   //     user = JSON.parse(Cookies.get('user') || '{}') as UserType
+//   //   } catch { }
+//   // }
+//   try {
+//     user = JSON.parse(kurabi.get('user') || '{}') as UserType
+//   } catch { }
+//   return user
+// }
 
-export function getDatabases() {
-  let dbList: DatabaseType[] = []
-  let dbId = ''
-  let db: DatabaseType | null = null
-  // if (typeof window == 'undefined') {
-  //   try {
-  //     dbList = JSON.parse(cookies().get('dbList')?.value || '[]') as DatabaseType[]
-  //   } catch { }
-  //   try {
-  //     db = JSON.parse(cookies().get('db')?.value || 'null') as DatabaseType | null
-  //   } catch { }
-  //   dbId = cookies().get('dbId')?.value || ''
-  // } else {
-  //   try {
-  //     dbList = JSON.parse(Cookies.get('dbList') || '[]') as DatabaseType[]
-  //   } catch { }
-  //   try {
-  //     db = JSON.parse(Cookies.get('db') || 'null') as DatabaseType | null
-  //   } catch { }
-  //   dbId = Cookies.get('dbId') || ''
-  // }
-  try {
-    dbList = JSON.parse(kurabi.get('dbList') || '[]') as DatabaseType[]
-  } catch { }
-  try {
-    db = JSON.parse(kurabi.get('db') || 'null') as DatabaseType | null
-  } catch { }
-  dbId = kurabi.get('dbId') || ''
-  return { dbId, db, dbList }
-}
+// export function getDatabases() {
+//   let dbList: DatabaseType[] = []
+//   let dbId = ''
+//   let db: DatabaseType | null = null
+//   // if (typeof window == 'undefined') {
+//   //   try {
+//   //     dbList = JSON.parse(cookies().get('dbList')?.value || '[]') as DatabaseType[]
+//   //   } catch { }
+//   //   try {
+//   //     db = JSON.parse(cookies().get('db')?.value || 'null') as DatabaseType | null
+//   //   } catch { }
+//   //   dbId = cookies().get('dbId')?.value || ''
+//   // } else {
+//   //   try {
+//   //     dbList = JSON.parse(Cookies.get('dbList') || '[]') as DatabaseType[]
+//   //   } catch { }
+//   //   try {
+//   //     db = JSON.parse(Cookies.get('db') || 'null') as DatabaseType | null
+//   //   } catch { }
+//   //   dbId = Cookies.get('dbId') || ''
+//   // }
+//   try {
+//     dbList = JSON.parse(kurabi.get('dbList') || '[]') as DatabaseType[]
+//   } catch { }
+//   try {
+//     db = JSON.parse(kurabi.get('db') || 'null') as DatabaseType | null
+//   } catch { }
+//   dbId = kurabi.get('dbId') || ''
+//   return { dbId, db, dbList }
+// }
 
 const PERSIST_COOKIES = ['deviceId', 'theme', 'lang']
 export function authSignOut() {
@@ -86,20 +85,20 @@ export function authSignOut() {
 
 // }
 
-export function getDeviceId() {
-  if (typeof window == 'undefined') {
-    let deviceId: string = cookies().get('deviceId')?.value || ''
-    if (!deviceId) {
-      deviceId = v4()
-      cookies().set('deviceId', deviceId, { secure: true })
-    }
-    return deviceId
-  } else {
-    let deviceId: string = Cookies.get('deviceId') || ''
-    if (!deviceId) {
-      deviceId = v4()
-      Cookies.set('deviceId', deviceId, { secure: true })
-    }
-    return deviceId
-  }
-}
+// export function getDeviceId() {
+//   if (typeof window == 'undefined') {
+//     let deviceId: string = cookies().get('deviceId')?.value || ''
+//     if (!deviceId) {
+//       deviceId = v4()
+//       cookies().set('deviceId', deviceId, { secure: true })
+//     }
+//     return deviceId
+//   } else {
+//     let deviceId: string = Cookies.get('deviceId') || ''
+//     if (!deviceId) {
+//       deviceId = v4()
+//       Cookies.set('deviceId', deviceId, { secure: true })
+//     }
+//     return deviceId
+//   }
+// }

@@ -17,13 +17,14 @@ import { NextResponse } from 'next/server'
 // import 'next-auth/jwt'
 import { postItem } from './fetch'
 import { cookies } from 'next/headers'
-import { getDeviceId } from './authHelper'
+import { v4 } from 'uuid'
+// import { getDeviceId } from './authHelper'
 
 const authOptions = {
   theme: {
     brandColor: '#ffffff',
     buttonText: 'fitifiti qwerty',
-    logo: '/img/aliabi-logo.png',
+    logo: '/img/icon.png',
     colorScheme: 'dark'
   },
   cookies: {
@@ -105,8 +106,13 @@ const authOptions = {
             return false
         }
 
+        let deviceId: string = cookies().get('deviceId')?.value || ''
+        if (!deviceId) {
+          deviceId = v4()
+          cookies().set('deviceId', deviceId, { secure: true })
+        }
 
-        const result = await postItem(url, '', { deviceId: getDeviceId(), user, account, profile })
+        const result = await postItem(url, '', { deviceId: deviceId, user, account, profile })
         cookies().set('token', result.token, { secure: true })
         cookies().set('user', JSON.stringify(result.user), { secure: true })
         cookies().set('dbList', JSON.stringify(result.dbList), { secure: true })

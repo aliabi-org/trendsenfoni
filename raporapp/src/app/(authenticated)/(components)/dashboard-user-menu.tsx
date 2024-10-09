@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 // import { SignOut } from '@/widgets/auth-components'
@@ -7,16 +9,28 @@ import ThemeToggleButton from '@/components/theme-toggle-button'
 // import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import SignOutButton from './signout-button'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { UserType } from '@/types/UserType'
-import { getAuthUser, getDatabases } from '@/lib/authHelper'
-
+// import { getAuthUser, getDatabases } from '@/lib/authHelper'
+import Cookies from 'js-cookie'
 
 interface DashboardUserMenuProps {
 }
 
 const DashboardUserMenu: FC<DashboardUserMenuProps> = ({ }) => {
-  const userInfo = getAuthUser()
+  const [token, setToken] = useState('')
+  const [userInfo, setUserInfo] = useState<UserType>()
+
+  useEffect(() => { !token && setToken(Cookies.get('token') || '') }, [])
+  useEffect(() => {
+    try {
+      if (Cookies.get('user')) {
+        setUserInfo(JSON.parse(Cookies.get('user') || '{}') as UserType)
+      }
+    } catch (err) {
+      console.log('hata:', err)
+    }
+  }, [token])
 
   if (!userInfo) {
     return <></>
