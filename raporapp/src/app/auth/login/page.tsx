@@ -25,7 +25,7 @@ const LoginPage = () => {
       <AppIntroduce />
 
     </div>
-    <div className=' h-full flex items-center justify-center w-full mt-8 md:mt-0'>
+    <div className=' h-full flex items-center justify-center w-full mt-0 md:mt-0'>
 
       <div className="w-full  mb-6 text-2xl max-w-[450px] space-y-4">
         <div className='flex flex-col mb-4'>
@@ -73,10 +73,6 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-
-
-
-
         <p className="w-full mt-6 text-center text-xs text-muted-foreground ">
           Devam'ı tıklayarak,{" "}
           <Link
@@ -103,8 +99,8 @@ const LoginPage = () => {
 
 function AppIntroduce() {
   return (
-    <div className="w-full flex justify-between items-center text-lg font-medium px-12 py-8">
-      <div className='space-y-4 mx-8'>
+    <div className="w-full flex justify-between items-center text-lg font-medium px-8">
+      <div className='flex flex-col gap-4 mx-8'>
         <h2 className='text-4xl'>Trend Senfoni</h2>
         <h3 className='text-2xl'>İş Raporlamasında Yeni Dönem</h3>
 
@@ -120,6 +116,14 @@ function AppIntroduce() {
         </ul>
         <p>Kullanıcı dostu arayüzümüz, karmaşık kurulumlar gerektirmeden raporlar oluşturmanızı kolaylaştırır.</p>
         <p><b>TrendSenfoni</b>'yi bugün kullanmaya başlayın ve iş raporlarınızı yönetme şeklinizi dönüştürün!</p>
+        <div className='flex flex-col'>
+          <div>ConnectorAbi Download Link</div>
+          <Link
+            className='text-blue-500'
+            href={'https://github.com/connectorabi/client/blob/main/installer/win64/connectorabi-setup.zip'}>
+            connectorabi-setup.zip
+          </Link>
+        </div>
       </div>
       <Separator
         className='h-[75vh] w-0.5 bg-slate-500'

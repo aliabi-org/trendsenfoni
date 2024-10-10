@@ -89,8 +89,8 @@ const authOptions = {
         console.log('callback signIn user:', user)
         console.log('callback signIn account:', account)
         console.log('callback signIn profile:', profile)
-        // console.log('callback signIn email:', email)
-        // console.log('callback signIn credentials:', credentials)
+        console.log('callback signIn email:', email)
+        console.log('callback signIn credentials:', credentials)
 
         switch (account?.provider) {
           case 'google':
@@ -105,14 +105,15 @@ const authOptions = {
           default:
             return false
         }
-
+        console.log('url:', url)
         let deviceId: string = cookies().get('deviceId')?.value || ''
         if (!deviceId) {
           deviceId = v4()
           cookies().set('deviceId', deviceId, { secure: true })
         }
-
+        console.log('deviceId:', deviceId)
         const result = await postItem(url, '', { deviceId: deviceId, user, account, profile })
+        console.log('postItem result2:', result)
         cookies().set('token', result.token, { secure: true })
         cookies().set('user', JSON.stringify(result.user), { secure: true })
         cookies().set('dbList', JSON.stringify(result.dbList), { secure: true })
@@ -120,7 +121,7 @@ const authOptions = {
         cookies().set('firm', result.firm || '', { secure: true })
         cookies().set('period', result.period || '', { secure: true })
         cookies().set('lang', result.lang || 'tr', { secure: true })
-
+        console.log('return true')
         return true
 
       } catch (err) {
@@ -129,9 +130,9 @@ const authOptions = {
       }
     },
   },
-  // trustHost: true,
-  // debug: true,
-  // useSecureCookies:true,
+  trustHost: true,
+  debug: true,
+  useSecureCookies: true,
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authOptions)

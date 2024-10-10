@@ -6,16 +6,18 @@ import { postItem } from '@/lib/fetch'
 import { redirect, useSearchParams, useRouter } from 'next/navigation'
 // import { authSignIn } from '../authHelper'
 import Cookies from 'js-cookie'
+import { ErrorPanel } from '@/components/error-panel'
 
 
 export default function MagicLinkPage({ }) {
   const searchParams = useSearchParams()
   const magicToken = searchParams.get('magicToken')
+  const [error, setError] = useState()
   const router = useRouter()
   console.log('magicToken:', magicToken)
 
   const magicLogin = () => {
-    postItem('/auth/magicLogin', Cookies.get('token'), { magicToken: magicToken })
+    postItem('/auth/magicLogin', '', { magicToken: 'hata' + magicToken + 'hata' })
       .then(result => {
 
         Cookies.set('token', result.token, { secure: true })
@@ -27,9 +29,7 @@ export default function MagicLinkPage({ }) {
         Cookies.set('lang', result.lang || 'tr', { secure: true })
         router.push('/home')
       })
-      .catch(err => {
-        console.log('hata:', err)
-      })
+      .catch(err => setError(err))
     // authSignIn(magicToken || '')
     //   .then(() => {
     //     router.push('/databases')
@@ -45,9 +45,14 @@ export default function MagicLinkPage({ }) {
 
   return (<div className='flex flex-col w-full px-6'>
     <h2 className='text-2xl'>Magic Link Page</h2>
-    <p className='font-mono text-wrap '>
-      Magic Token: {magicToken}
-    </p>
+    {magicToken && (
+      <p className='font-mono text-wrap '>
+        Magic Token: {magicToken}
+      </p>
+    )}
+    {error && <>
+      <ErrorPanel>{error}</ErrorPanel>
+    </>}
   </div>)
 
 

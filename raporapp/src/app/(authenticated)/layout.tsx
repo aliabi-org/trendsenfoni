@@ -5,7 +5,7 @@ import Link from "next/link"
 
 import { cookies } from 'next/headers'
 import { RedirectType, redirect } from 'next/navigation'
-import DashboardHeader from './(components)/dashboard-header'
+import { DashboardHeader } from './(components)/dashboard-header'
 import DashboardFooter from './(components)/dashboard-footer'
 import { UserType } from '@/types/UserType'
 import { getAuthToken } from '@/lib/authHelper'

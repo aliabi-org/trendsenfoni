@@ -7,11 +7,11 @@ import { Input } from "@/components/ui/input"
 import DashboardUserMenu from './dashboard-user-menu'
 import { FC } from 'react'
 import { UserType } from '@/types/UserType'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
-interface DashboardHeaderProps {
-}
-
-const DashboardHeader: FC<DashboardHeaderProps> = ({ }) => {
+export function DashboardHeader({ }) {
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-0 md:px-2 dark:border-gray-800 dark:bg-gray-950"    >
       <div className="flex flex-row items-center gap-4">
@@ -31,21 +31,48 @@ const DashboardHeader: FC<DashboardHeaderProps> = ({ }) => {
           </CustomLink>
         </nav>
       </div>
-      <div className="flex items-center gap-4">
-        {/* <div>
-          <form className="relative hidden md:block">
-            <i className="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400"></i>
-            <Input
-              className="w-full rounded-md bg-gray-100 px-8 py-2 text-sm shadow-none focus:bg-white dark:bg-gray-800 dark:focus:bg-gray-950"
-              placeholder="Search..."
-              type="search"
-            />
-          </form>
-        </div> */}
+      <div className="flex items-center gap-2">
         <DashboardUserMenu />
+        <div className='flex md:hidden'><MobileMenu /></div>
+
       </div>
     </header>
   )
 }
 
-export default DashboardHeader
+function MobileMenu() {
+  return (<>
+    <DropdownMenu >
+      <DropdownMenuTrigger asChild  >
+        <Button className="rounded-full border border-gray-200 w-12 h-12 dark:border-gray-800"
+          size="icon"
+          variant="ghost"
+        >
+          <i className="fa-solid fa-bars"></i>
+          <span className="sr-only">Toggle user menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" >
+        <DropdownMenuItem>
+          <Link href="/home" className='flex items-center '>
+            <i className="fa-solid fa-gauge-high me-2 text-lg"></i> Ana Ekran
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/reports" className='flex items-center '>
+            <i className="fa-solid fa-chart-line me-2 text-lg"></i>
+            Raporlar
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem >
+          <Link href="/settings" className='flex items-center'>
+            <i className='fa-solid fa-gears me-2 text-lg'></i>
+            Ayarlar
+          </Link>
+        </DropdownMenuItem>
+
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </>)
+}
