@@ -20,13 +20,16 @@ export function DashboardHeader({ }) {
         </CustomLink>
         <nav className=" hidden gap-4 text-sm font-medium md:flex">
           <CustomLink className="rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800" href="/home">
-            Home
+            <i className="fa-solid fa-gauge-high me-2 text-lg"></i>
+            Ana Sayfa
           </CustomLink>
           <CustomLink className="rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800" href="/reports">
+            <i className="fa-solid fa-chart-line me-2 text-lg"></i>
             Raporlar
           </CustomLink>
-
+          <div className='border-r'></div>
           <CustomLink className="rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800" href="/settings">
+            <i className='fa-solid fa-gears me-2 text-lg'></i>
             Ayarlar
           </CustomLink>
         </nav>
@@ -55,7 +58,8 @@ function MobileMenu() {
       <DropdownMenuContent align="end" >
         <DropdownMenuItem>
           <Link href="/home" className='flex items-center '>
-            <i className="fa-solid fa-gauge-high me-2 text-lg"></i> Ana Ekran
+            <i className="fa-solid fa-gauge-high me-2 text-lg"></i>
+            Ana Ekran
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
